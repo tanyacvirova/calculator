@@ -1,0 +1,10 @@
+.form__body {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: repeat(1fr, 4);
+    grid-auto-flow: row;
+    row-gap: 20px;
+    column-gap: 10px;
+    align-items: baseline;
+}

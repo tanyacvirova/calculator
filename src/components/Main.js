@@ -1,0 +1,56 @@
+import { useState, useEffect } from 'react';
+import { CurrentUserContext } from '../context/Context.js';
+import Form from './Form.js';
+import Content from './Content.js';
+import Cover from './Cover.js';
+import Footer from './Footer.js';
+import * as d3 from "d3";
+
+function Main() {
+    const [currentUserData, setCurrentUserData] = useState({});
+    const [isFormFilled, setIsFormFilled] = useState(false);
+    const [regionsData, setRegionsData] = useState([]);
+    const [isLoaded, setIsLoaded] = useState(false);
+
+    useEffect(() => {
+        const dataFetch = async() => {
+            const data = await d3.csv('/data_v20251216.csv', (d) => {
+                return {
+                    sum: +d.sum,
+                    sum_corr: +d.sum_corr,
+                    share: +d.share,
+                    step: +d.step_share,
+                    code: +d.region_code,
+                    region: d.region_short_name
+                    }
+            });
+            setRegionsData(d3.sort(data, (d) => d.code));
+        };
+        dataFetch();
+    }, []);
+
+    useEffect(() => {
+        if (regionsData.length > 0) {
+            setIsLoaded(true);
+        }
+    }, [regionsData]);
+    
+    function calculate(formData) {
+        formData.perCapitaIncome = +formData.income / +formData.period / +formData.members
+        setCurrentUserData(formData);
+        setIsFormFilled(true);
+    }
+
+    return (
+        <CurrentUserContext.Provider value={currentUserData}>
+            <main className='content'>
+                <Cover />
+                <Form onSubmit={(data) => calculate(data)} />
+                {(isFormFilled && isLoaded) && <Content userData={currentUserData} data={regionsData}/>}
+                <Footer />
+            </main>
+        </CurrentUserContext.Provider>
+    );
+};
+
+export default Main;

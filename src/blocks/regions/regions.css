@@ -1,0 +1,88 @@
+.regions__wrapper {
+    overflow: hidden;
+    transition: max-height 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+    max-height: 5000px;
+}
+
+.regions__wrapper:not(.expanded) {
+    max-height: 1500px;
+}
+
+.regions {
+    width: 100%;
+    margin: 20px 0;
+    height: auto;
+    display: flex;
+    flex-flow: row wrap;
+    row-gap: 30px;
+    column-gap: 20px;
+}
+
+.regions__region {
+    width: 205px;
+}
+
+.regions__region-side {
+    width: 235px;
+}
+
+.regions__title {
+    margin: 0;
+    padding-left: 5px;
+    padding-bottom: 5px;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 100%;
+    color: #282828;
+}
+
+.regions__accent {
+    margin: 0;
+    padding: 5px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 100%;
+    color: #FF6A3D;
+}
+
+.shift {
+    padding-left: 30px;
+}
+
+.regions__button {
+    background: none;
+    border: none;
+    padding: 10px;
+    margin: 20px 0;
+    width: 100%;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    line-height: normal;
+    color: rgba(16, 17, 30, 0.6);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    outline: 1px solid #E7E4D8;
+    transition: color 0.2s ease;
+}
+
+.regions__button:hover {
+    background-color: #E7E4D8;
+    opacity: 0.6;
+}
+
+.regions__button-arrow {
+    width: 20px;
+    height: 20px;
+    opacity: 0.6;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.regions__button.expanded .regions__button-arrow {
+    transform: rotate(180deg);
+}

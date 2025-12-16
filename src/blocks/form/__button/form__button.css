@@ -1,0 +1,23 @@
+.form__button {
+    width: 40%;
+    background-color: #FFFFFF;
+    border: none;
+    padding: 10px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    line-height: normal;
+    color: #FF6A3D;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.form__button:disabled {
+    background-color: #E7E4D8;
+    color: #CCCCCC;
+    cursor: default;
+}
+
+.form__button:hover {
+    background-color: #FFD9B7;
+}

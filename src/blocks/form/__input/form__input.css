@@ -1,0 +1,29 @@
+.form__input {
+    border: 0;
+    width: 40%;
+    box-sizing: border-box;
+    border-bottom: 1px solid #FFF;
+    background-color: transparent;
+    font-size: 24px;
+    font-family: inherit;
+    color: #FFF;
+    padding: 10px 0;
+    margin: 0;
+    line-height: normal;
+}
+
+.stretched {
+    width: 100%;
+}
+
+.form__input:focus {
+    outline: 0 solid transparent;
+    border-bottom: 1px solid #FFD9B7;
+    color: #FFD9B7;
+}
+
+.form__input:disabled {
+    outline: 0 solid transparent;
+    border-bottom: 1px solid #CCCCCC;
+    color: #CCCCCC;
+}

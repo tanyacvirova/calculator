@@ -1,0 +1,9 @@
+.title__headline {
+    margin: 0;
+    padding: 30px 0 10px;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 60px;
+    line-height: 90%;
+    color: #282828;
+}

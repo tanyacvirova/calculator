@@ -1,0 +1,47 @@
+.howto {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    outline: 1px solid #E7E4D8;
+    background-color: #FFFFFF;
+    margin-bottom: 20px;
+}
+
+.howto__container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.howto__arrow {
+    width: 30px;
+    height: 15px;
+    color: #10111E;
+}
+
+.howto__title {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 36px;
+    line-height: normal;
+    color: #10111E;
+    max-width: 800px;
+    margin: 0;
+}
+
+.howto__text {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: normal;
+    color: #282828;
+    max-width: 1000px;
+    margin: 0;
+    padding: 5px 0px 5px;
+}
+
+.open {
+    transform: rotate(180deg);
+}

@@ -1,0 +1,23 @@
+/*@font-face {
+  font-family: 'Futura-PT';
+  font-weight: normal;
+  font-display: swap;
+  src: url("./Futura-PT_Book.woff2") format("woff2"),
+       url("./Futura-PT_Book.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Futura-PT';
+  font-weight: bold;
+  font-display: swap;
+  src: url("./Futura-PT_Demi.woff2") format("woff2"),
+       url("./Futura-PT_Demi.woff") format("woff");
+}*/
+
+@font-face {
+  font-family: 'AeonikPro';
+  font-weight: normal;
+  font-display: swap;
+  src: url("./aeonikpro-regular.woff2") format("woff2"),
+       url("./aeonikpro-regular.woff") format("woff");
+}

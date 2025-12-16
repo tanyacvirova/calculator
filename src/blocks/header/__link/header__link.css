@@ -1,0 +1,21 @@
+.header__link {
+    margin: 0;
+    padding: 0;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    line-height: normal;
+    color: #FF6A3D;
+    cursor: pointer;
+    text-decoration: none;
+    border: 0 none transparent;
+    background-color: transparent;
+}
+
+.header__link:hover {
+    opacity: 0.8;
+}
+
+.header__link:visited {
+    color: #FF6A3D;
+}

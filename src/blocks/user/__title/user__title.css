@@ -1,0 +1,19 @@
+.user__title {
+    margin: 0;
+    padding: 10px 0 10px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 36px;
+    line-height: normal;
+    color: #282828;
+    max-width: 800px;
+}
+
+.user__title-bold {
+    font-weight: bold;
+}
+
+.user__title-accent {
+    font-weight: bold;
+    color: #FF6A3D;
+}

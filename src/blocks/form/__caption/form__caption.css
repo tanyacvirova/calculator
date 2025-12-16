@@ -1,0 +1,11 @@
+.form__caption {
+    width: 80%;
+    margin: 0;
+    padding: 15px 0 5px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 100%;
+    color: #FFD9B7;
+    line-height: 120%;
+}

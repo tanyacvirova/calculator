@@ -1,0 +1,6 @@
+.form__line {
+    display: flex;
+    flex-direction: row;
+    justify-content: baseline;
+    gap: 20px;
+}

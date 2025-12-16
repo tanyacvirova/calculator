@@ -1,0 +1,15 @@
+.user__text {
+    margin: 0;
+    padding: 5px 0 10px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    line-height: normal;
+    color: #282828;
+    max-width: 1000px;
+}
+
+.sub {
+    font-weight: bold;
+    padding: 5px 0 0;
+}
