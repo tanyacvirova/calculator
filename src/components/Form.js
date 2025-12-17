@@ -16,7 +16,7 @@ function Form(props) {
     useEffect(() => {
         const fetchCsv = async() => {
             try {
-                const data = await d3.csv('/codes.csv', (d) => {
+                const data = await d3.csv(process.env.PUBLIC_URL + '/codes.csv', (d) => {
                     return {
                         region: d.region,
                         name: d.name,

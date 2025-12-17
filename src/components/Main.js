@@ -14,7 +14,7 @@ function Main() {
 
     useEffect(() => {
         const dataFetch = async() => {
-            const data = await d3.csv('/data_v20251216.csv', (d) => {
+            const data = await d3.csv(process.env.PUBLIC_URL + '/data_v20251216.csv', (d) => {
                 return {
                     sum: +d.sum,
                     sum_corr: +d.sum_corr,
