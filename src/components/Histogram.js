@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { margin, chartParams } from '../constants/constants.js';
 import AxisBottom from './AxisBottom.js';
 import AxisLeft from './AxisLeft.js';
@@ -11,24 +11,28 @@ function Histogram({ width, height, mini, content }) {
     const max = content.max;
     const [tooltipData, settooltipData] = useState(null);
 
-    const xScale = d3.scaleLinear()
-        .domain([data.binsBase[0].x0, data.binsBase[data.binsBase.length - 1].x1])
-        .range((mini) ? [0, width] : [margin(mini).left, width - margin(mini).right]);
+    const xScale = useMemo(() => {
+        return d3.scaleLinear()
+            .domain([data.binsBase[0].x0, data.binsBase[data.binsBase.length - 1].x1])
+            .range((mini) ? [0, width] : [margin(mini).left, width - margin(mini).right]);
+    }, [data.binsBase, width, mini]);
 
-    const yScale = d3.scaleLinear()
-        .domain([0, Math.max(...max)]).nice()
-        .range((mini) ? [height, 0] : [height - margin(mini).bottom, margin(mini).top]);
+    const yScale = useMemo(() => {
+        return d3.scaleLinear()
+            .domain([0, Math.max(...max)]).nice()
+            .range((mini) ? [height, 0] : [height - margin(mini).bottom, margin(mini).top]);
+    }, [height, max, mini]);
 
-    function handleHover(rectData) {
+    const handleHover = useCallback((rectData) => {
         settooltipData(rectData);
-    }
+    }, []);
 
     return (
         <div style={{ position: "relative"}}>
             <svg width={width} height={height}>
                 <AxisLeft yScale={yScale} width={width} mini={mini} />
                 <g transform={`translate(0, ${mini ? height : height - margin(mini).bottom})`}>
-                    <AxisBottom xScale={xScale} height={height} mini={mini}/>
+                    <AxisBottom xScale={xScale} height={height} width={width} mini={mini}/>
                 </g>
                 <Rect 
                     bins={data.binsBase}
@@ -36,7 +40,7 @@ function Histogram({ width, height, mini, content }) {
                     yScale={yScale}
                     height={height}
                     mini={mini}
-                    onHover={(rectData) => handleHover(rectData)}
+                    onHover={handleHover}
                 />
             </svg>
             {!mini && <div style={{
@@ -47,7 +51,7 @@ function Histogram({ width, height, mini, content }) {
                 left: 0,
                 pointerEvents: "none"
             }}>
-                <Tooltip interactionData={tooltipData} />
+                <Tooltip interactionData={tooltipData} chartWidth={width}/>
                 {(tooltipData && tooltipData.value <= chartParams.threshold) && <div style={{ 
                     position: "absolute",
                     top: tooltipData.y,

@@ -2,3 +2,11 @@
     background-image: radial-gradient(circle at 105vw -5vh, #FFD9B7 0%, #FF6A3D 50%);
     padding: 40px;
 }
+
+@media screen and (max-width: 800px) {
+    .form {
+        background-image: radial-gradient(circle at 101vw -1vh, #FFD9B7 0%, #FF6A3D 30%);
+        padding: 20px 20px;
+        margin-bottom: 20px;
+    }
+}

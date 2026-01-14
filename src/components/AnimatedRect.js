@@ -2,7 +2,7 @@ import { useSpring, animated, config } from "@react-spring/web";
 import { useContext } from "react";
 import { CurrentUserContext } from "../context/Context";
 
-function AnimatedRect({ x, y, rectWidth, rectHeight, value, cum, onHover}) {
+function AnimatedRect({ x, y, rectWidth, rectHeight, value, cum, sum, onHover}) {
     const userData = useContext(CurrentUserContext);
     const springProps = useSpring({
         to: { x, y, rectWidth, rectHeight },
@@ -23,7 +23,8 @@ function AnimatedRect({ x, y, rectWidth, rectHeight, value, cum, onHover}) {
                     width: rectWidth,
                     height: rectHeight,
                     value: value,
-                    cum: cum
+                    cum: cum,
+                    sum: sum
                 })
             }
             onMouseLeave={() => onHover(null)}

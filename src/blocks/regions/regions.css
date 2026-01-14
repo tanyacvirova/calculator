@@ -86,3 +86,22 @@
 .regions__button.expanded .regions__button-arrow {
     transform: rotate(180deg);
 }
+
+@media screen and (max-width: 800px) {
+    .regions__button {
+        font-size: 20px;
+        padding: 15px 10px;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .regions {
+        flex-flow: column;
+    }
+    .regions__region-side {
+        width: 100%;
+    }
+    .regions__region {
+        width: 100%;
+    }
+}

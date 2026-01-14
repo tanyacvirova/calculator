@@ -3,4 +3,21 @@
     flex-direction: row;
     justify-content: baseline;
     gap: 20px;
+    width: 100%;
+}
+
+@media screen and (max-width: 800px) {
+    .form__line {
+        flex-direction: column;
+        gap: 16px;
+        width: 100%;
+    }
+    
+    .form__line > .form__input {
+        width: 100%;
+    }
+    
+    .form__line > .form__toggle {
+        width: 100%;
+    }
 }

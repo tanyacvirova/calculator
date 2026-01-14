@@ -27,7 +27,7 @@
     opacity: 0.65;
 }
 
-.circle:nth-child(3) {
+.circle:nth-child(2) {
     background-image: url("/src/images/food.svg");
     background-size: 70%;
     background-position: center;
@@ -41,21 +41,21 @@
     background-repeat: no-repeat;
 }
 
-.circle:nth-child(12) {
+.circle:nth-child(15) {
     background-image: url("/src/images/furniture.svg");
     background-size: 70%;
     background-position: center;
     background-repeat: no-repeat;
 }
 
-.circle:nth-child(15) {
+.circle:nth-child(19) {
     background-image: url("/src/images/car.svg");
     background-size: 80%;
     background-position: center;
     background-repeat: no-repeat;
 }
 
-.circle:nth-child(16) {
+.circle:last-child {
     background-image: url("/src/images/house.svg");
     background-size: 75%;
     background-position: center;
@@ -101,17 +101,16 @@
 
 @media screen and (max-width: 800px) {
     .cover-headline {
-        padding: 120px 32px 60px;
+        padding: 100px 20px 40px;
         max-width: 720px;
         gap: 18px;
     }
     .cover-title {
-        font-size: 48px;
-        line-height: 105%;
+        font-size: 44px;
+        line-height: 100%;
     }
     .cover-subtitle {
-        font-size: 28px;
-        line-height: 110%;
+        font-size: 24px;
     }
 }
 

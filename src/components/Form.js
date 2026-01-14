@@ -1,5 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import * as d3 from "d3";
+
+// Move validateNumeric outside component to avoid recreation
+const validateNumeric = (name, value) => {
+    if (value === "") {
+        return "Введите число";
+    }
+    if (!/^\d+$/.test(value)) {
+        return "Можно вводить только цифры";
+    }
+    return "";
+};
 
 function Form(props) {
     const [formData, setFormData] = useState({
@@ -7,7 +18,7 @@ function Form(props) {
         income: "50000",
         period: "1",
         members: "1",
-        status: 3
+        status: "3"
     });
     const [errors, setErrors] = useState({ income: "", members: "" });
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -31,44 +42,35 @@ function Form(props) {
         fetchCsv();
     }, []);
 
-    const validateNumeric = (name, value) => {
-        if (value === "") {
-            return "Введите число";
-        }
-        if (!/^\d+$/.test(value)) {
-            return "Можно вводить только цифры";
-        }
-        return "";
-    };
-
-    const handleChange = (evt) => {
+    const handleChange = useCallback((evt) => {
         const { name, value, type } = evt.target;
+        
         if (isSubmitting) {
             setIsSubmitting(false);
         }
 
         if (type === "select-one" && name === "region") {
             const selectedOption = evt.target.options[evt.target.selectedIndex];
-            setFormData({ ...formData, [name]: {code: value, name: selectedOption.text} });
+            setFormData(prevFormData => ({ ...prevFormData, [name]: {code: value, name: selectedOption.text} }));
             return;
         }
 
         if (type === "radio") {
-            setFormData({ ...formData, [name]: value });
+            setFormData(prevFormData => ({ ...prevFormData, [name]: value }));
             return;
         }
 
         if (name === "income" || name === "members") {
             const errorMsg = validateNumeric(name, value);
-            setErrors({ ...errors, [name]: errorMsg });
-            setFormData({ ...formData, [name]: value });
+            setErrors(prevErrors => ({ ...prevErrors, [name]: errorMsg }));
+            setFormData(prevFormData => ({ ...prevFormData, [name]: value }));
             return;
         }
 
-        setFormData({ ...formData, [name]: value });
-    };
+        setFormData(prevFormData => ({ ...prevFormData, [name]: value }));
+    }, [isSubmitting]);
 
-    const handleSubmit = (evt) => {
+    const handleSubmit = useCallback((evt) => {
         evt.preventDefault();
         const incomeError = validateNumeric("income", formData.income);
         const membersError = validateNumeric("members", formData.members);
@@ -81,12 +83,14 @@ function Form(props) {
         const payload = {
             ...formData,
             income: Number(formData.income),
-            members: Number(formData.members)
+            period: Number(formData.period),
+            members: Number(formData.members),
+            status: Number(formData.status)
         };
 
         props.onSubmit(payload);
         setIsSubmitting(true);
-    };
+    }, [formData, props]);
 
     const hasErrors = !!errors.income || !!errors.members || formData.income === "" || formData.members === "";
 

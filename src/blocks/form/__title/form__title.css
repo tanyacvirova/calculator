@@ -7,3 +7,9 @@
     line-height: normal;
     color: #FFFFFF;
 }
+
+@media screen and (max-width: 800px) {
+    .form__title {
+        font-size: 28px;
+    }
+}

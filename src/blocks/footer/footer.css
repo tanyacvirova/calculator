@@ -19,3 +19,16 @@
     color: #282828;
     opacity: 0.6;
 }
+
+@media screen and (max-width: 800px) {
+    .footer {
+        margin: 0;
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
+
+    .footer_text {
+        font-size: 20px;
+        line-height: normal;
+    }
+}

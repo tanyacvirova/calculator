@@ -11,3 +11,10 @@
 .form__radio:checked + .form__label {
     color: #000000;
 }
+
+@media screen and (max-width: 800px) {
+    .form__label {
+        font-size: 20px;
+        margin-top: 20px;
+    }
+}

@@ -36,3 +36,17 @@
     border: 1px solid #FFD9B7;
     color: #FFD9B7;
 }
+
+@media screen and (max-width: 800px) {
+    .buttons_container {
+        width: 100%;
+    }
+    .button-active {
+        width: 50%;
+        font-size: 20px;
+    }
+    .button-disabled {
+        width: 50%;
+        font-size: 20px;
+    }
+}

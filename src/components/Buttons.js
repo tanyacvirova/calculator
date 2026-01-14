@@ -1,15 +1,12 @@
-import { useState } from "react";
+import { useCallback } from "react";
 
 function Buttons({ onClick, corr }) {
-    const [isCorr, setIsCorr] = useState(corr);
+    const handleToggle = useCallback(() => {
+        onClick(!corr);
+    }, [onClick, corr]);
 
-    const handleToggle = () => {
-        onClick(!isCorr);
-        setIsCorr(!isCorr);
-    };
-
-    const status1 = isCorr ? "button-disabled" : "button-active";
-    const status2 = isCorr ? "button-active" : "button-disabled";
+    const status1 = corr ? "button-disabled" : "button-active";
+    const status2 = corr ? "button-active" : "button-disabled";
 
     return(
         <div className="buttons_container">

@@ -13,3 +13,9 @@
     font-weight: bold;
     padding: 5px 0 0;
 }
+
+@media screen and (max-width: 800px) {
+    .user__text {
+        font-size: 20px;
+    }
+}

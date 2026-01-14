@@ -65,3 +65,10 @@ a:link {
 a:visited {
     color: #5D5F88;
 }
+
+@media screen and (max-width: 800px) {
+    .user__container {
+        padding: 0 20px;
+        margin: 10px 0 20px;
+    }
+}

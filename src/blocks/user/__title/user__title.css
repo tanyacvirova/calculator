@@ -17,3 +17,10 @@
     font-weight: bold;
     color: #FF6A3D;
 }
+
+@media screen and (max-width: 800px) {
+    .user__title {
+        font-size: 28px;
+        padding: 0;
+    }
+}

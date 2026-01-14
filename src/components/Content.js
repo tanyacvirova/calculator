@@ -1,6 +1,9 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
+import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { chartParams, rosstatData } from "../constants/constants";
+import { useDimensions } from '../hooks/useDimensions';
+import { calculating } from '../utils/calculations';
 import * as d3 from "d3";
+
 import Buttons from "./Buttons";
 import ResponsiveBlock from './ResponsiveBlock';
 import AnimatedHistogram from './AnimatedHistogram';
@@ -10,152 +13,81 @@ import ExpandedBlock from './ExpandedBlock';
 import PromoBlock from './PromoBlock';
 import arrowSvg from '../images/arrow.svg';
 
+
 function Content({ userData, data }) {
     const [corr, setCorr] = useState(false);
     const [showAll, setShowAll] = useState(false);
     const regionsContainerRef = useRef(null);
+    const containerDimensions = useDimensions(regionsContainerRef);
     const [columnsPerRow, setColumnsPerRow] = useState(5);
 
-    function bining(data, attr) {
-        let cumSum = 0;
-        const exp = d3.range(0, attr.threshold / attr.step + 1, 1).map((d, i) => {
-            cumSum = cumSum + data.get(d);
-            return {
-                x0: d * attr.step,
-                x1: (d + 1) * attr.step,
-                sum: data.get(d),
-                cumSum: cumSum
-            }
-        })
-        return exp;
-    }
-
-    function calculating(region, attr, userData) {
-
-        // Calculating intervals. 
-        const addGroup = region.map(obj => {
-            const max = Math.floor(attr.threshold / attr.step);
-            const currentBase = Math.floor(obj.sum / attr.step);
-            const currentScaled = Math.floor(obj.sum_corr / attr.step);
-            
-            return {
-                ...obj,
-                groupBase: currentBase <= max ? currentBase : max,
-                groupScaled: currentScaled <= max ? currentScaled : max
-            }
+    const { allRegionsData, customRegion, russiaData, chuckotkaData, limits } = useMemo(() => {
+        const regions = d3.group(data, (d) => d.code);
+        const codes = Array.from(new Set(data.map((d => d.code))));
+        const allRegions = codes.slice(1).map(d => {
+            return calculating(regions.get(d), chartParams, userData);
+        });
+        const custom = calculating(regions.get(+userData.region.code), chartParams, userData);
+        const russia = calculating(regions.get(0), chartParams, userData);
+        const chuckotka = calculating(regions.get(77), chartParams, userData);
+        const regionLimits = allRegions.map((region) => {
+            return region.maxBase;
         });
 
-        // Calculating sum for each bin.
-        const calcShareBase = d3.rollup(addGroup, (D) => d3.sum(D, (d) => d.step), (d) => d.groupBase);
-        const calcShareScaled = d3.rollup(addGroup, (D) => d3.sum(D, (d) => d.step), (d) => d.groupScaled);
-
-        // Calculating share of families with income below user data.
-        const index = Math.floor((userData.perCapitaIncome - 1000) / 500);
-        const belowBase = (() => {
-            if (index >= 1000) {
-                return region[999];
-            } else if (index < 0) {
-                return region[0];
-            } else {
-                return region[index];
-            }
-        })();
-
-        const findShareCorr = d3.minIndex(region.map(obj => {
-            return {
-                ...obj,
-                diff: Math.abs(obj.sum_corr - userData.perCapitaIncome)
-            }
-        }), (d) => d.diff);
-        const belowScaled = region[findShareCorr];
-
-        // Bining.
-        const binsBase = bining(calcShareBase, attr);
-        const binsScaled = bining(calcShareScaled, attr);
-
         return {
-            code: belowBase.code,
-            region: belowBase.region,
-            belowBase: belowBase.share,
-            belowScaled: belowScaled.share,
-            sumBase: Math.ceil(d3.sum(binsBase, (d) => d.sum)) === 100,
-            sumScaled: Math.ceil(d3.sum(binsScaled, (d) => d.sum)) === 100,
-            maxBase: d3.max(binsBase, (d) => d.sum),
-            maxScaled: d3.max(binsScaled, (d) => d.sum),
-            binsBase: binsBase,
-            binsScaled: binsScaled
+            allRegionsData: allRegions,
+            customRegion: custom,
+            russiaData: russia,
+            chuckotkaData: chuckotka,
+            limits: regionLimits
         };
-    }
+    }, [data, userData]);
 
-    const regions = d3.group(data, (d) => d.code);
-    const codes = Array.from(new Set(data.map((d => d.code))));
-    const allRegionsData = codes.slice(1).map(d => {
-        return calculating(regions.get(d), chartParams, userData);
-    });
-    const customRegion = calculating(regions.get(+userData.region.code), chartParams, userData);
-    const russiaData = calculating(regions.get(0), chartParams, userData);
-    const chuckotkaData = calculating(regions.get(77), chartParams, userData);
-    const limits = allRegionsData.map((region) => {
-        return region.maxBase;
-    });
-
-    // Memoize sorted regions to avoid recalculating on every render
     const sortedRegions = useMemo(() => {
         return d3.sort(allRegionsData, (d) => d.belowBase);
     }, [allRegionsData]);
 
-    // Calculate initial visible count based on columns (5 rows initially)
-    const initialVisibleCount = columnsPerRow * 4;
-    const totalRegions = 85;
-    const remainingCount = totalRegions - initialVisibleCount;
-
-    function handleClick(value) {
+    const handleClick = useCallback((value) => {
         setCorr(value);
-    }
+    }, []);
 
-    function handleShowAllClick() {
-        setShowAll(!showAll);
-    }
+    const handleShowAllClick = useCallback(() => {
+        setShowAll(prev => !prev);
+    }, []);
 
-    // Calculate columns per row based on container width for responsive left-axis detection
+    const initialVisibleCount = useMemo(() => {
+        return columnsPerRow * 4;
+    }, [columnsPerRow]);
+
+    const totalRegions = 85;
+    
+    const remainingCount = useMemo(() => {
+        return totalRegions - initialVisibleCount;
+    }, [initialVisibleCount]);
+
     useEffect(() => {
-        const calculateColumns = () => {
-            if (!regionsContainerRef.current) return;
-            
-            const containerWidth = regionsContainerRef.current.offsetWidth;
-            const firstItemWidth = 235; // regions__region-side width
-            const regularItemWidth = 205; // regions__region width
-            const gap = 20; // column-gap from CSS
-            
-            // Calculate how many items fit: first item + regular items
-            let availableWidth = containerWidth - firstItemWidth;
-            let columns = 1;
-            
-            while (availableWidth >= regularItemWidth + gap) {
-                availableWidth -= (regularItemWidth + gap);
-                columns++;
-            }
-            
-            setColumnsPerRow(Math.max(1, columns));
-        };
+        const containerWidth = containerDimensions.width;
 
-        calculateColumns();
-
-        const resizeObserver = new ResizeObserver(() => {
-            calculateColumns();
-        });
-
-        if (regionsContainerRef.current) {
-            resizeObserver.observe(regionsContainerRef.current);
+        if (containerWidth < 500) {
+            setColumnsPerRow(1);
+            return;
         }
 
-        window.addEventListener('resize', calculateColumns);
-
-        return () => {
-            resizeObserver.disconnect();
-            window.removeEventListener('resize', calculateColumns);
-        };
-    }, []);
+        const firstItemWidth = 235;
+        const regularItemWidth = 205;
+        const gap = 20;
+        
+        let availableWidth = containerWidth - firstItemWidth;
+        let columns = 1;
+        
+        while (availableWidth >= regularItemWidth + gap) {
+            availableWidth -= (regularItemWidth + gap);
+            columns++;
+        }
+        
+        setColumnsPerRow(Math.max(1, columns));
+        
+    }, [containerDimensions.width]);
     
     return (
         <section className="user">
@@ -173,7 +105,7 @@ function Content({ userData, data }) {
             </div>
             <div className='user__container'>
                 <p className='user__text'>До&nbsp;конца нулевых экономическое неравенство в&nbsp;России увеличивалось: доходы <a href='https://www.hse.ru/data/2014/04/10/1320216966/ovcharova.pdf.pdf' target='_blanc' rel="noopener noreferrer">перераспределялись</a> в&nbsp;пользу богатых, а&nbsp;бедным государство не&nbsp;могло обеспечить адресную поддержку.</p>
-                <p className='user__text'>С&nbsp;2013 года неравенство начало постепенно снижаться. Главная причина&nbsp;&mdash; увеличение <a href='https://voprstat.elpub.ru/jour/article/view/1818' target='_blanc' rel="noopener noreferrer">социальной поддержк</a> граждан, особенно семей с&nbsp;детьми, на&nbsp;которые <a href='https://tochno.st/materials/v-god-nuzhno-chtoby-vyvesti-iz-bednosti-semi-s-detmi' target='_blanc' rel="noopener noreferrer">приходится</a> подавляющая часть малоимущих. Важную роль также сыграло <a href='https://www.econorus.org/repec/journl/2024-65-267-275r.pdf' target='_blanc' rel="noopener noreferrer">сокращение</a> разрыва в&nbsp;оплате труда между людьми с&nbsp;разным уровнем образования и&nbsp;жителями разных регионов.</p>
+                <p className='user__text'>С&nbsp;2013 года неравенство начало постепенно снижаться. Главная причина&nbsp;&mdash; увеличение <a href='https://voprstat.elpub.ru/jour/article/view/1818' target='_blanc' rel="noopener noreferrer">социальной поддержки</a> граждан, особенно семей с&nbsp;детьми, на&nbsp;которые <a href='https://tochno.st/materials/v-god-nuzhno-chtoby-vyvesti-iz-bednosti-semi-s-detmi' target='_blanc' rel="noopener noreferrer">приходится</a> подавляющая часть малоимущих. Важную роль также сыграло <a href='https://www.econorus.org/repec/journl/2024-65-267-275r.pdf' target='_blanc' rel="noopener noreferrer">сокращение</a> разрыва в&nbsp;оплате труда между людьми с&nbsp;разным уровнем образования и&nbsp;жителями разных регионов.</p>
                 <p className='user__text'>Тем не&nbsp;менее, среднедушевые доходы в&nbsp;России до&nbsp;сих пор распределены неравномерно. Средний подушевой доход в&nbsp;стране в&nbsp;2024 году&nbsp;&mdash; 62&nbsp;490&nbsp;рублей, но&nbsp;большая часть населения получает до&nbsp;50&nbsp;тысяч рублей в&nbsp;месяц.</p>
             </div>
             <div className='user__container'>
@@ -184,7 +116,7 @@ function Content({ userData, data }) {
             </div>
             <div className='user__container'>
                 <h3 className='user__text sub'>Чукотский автономный округ</h3>
-                <p className='user__text'>Ваш среднедушевой доход выше, чем у <span className="user__title-accent">{d3.format(".0f")(corr ? chuckotkaData.belowScaled : chuckotkaData.belowBase)}%</span> жителей</p>
+                <p className='user__text'>Ваш среднедушевой доход выше, чем у <span className="user__title-accent">{d3.format(".0f")(corr ? chuckotkaData.belowScaled : chuckotkaData.belowBase)}%</span> жителей</p>
                 <Buttons onClick={(value) => handleClick(value)} corr={corr} />
                 <p className='user__caption'>&uarr;Доля семей с&nbsp;определенным доходом</p>
                 <ResponsiveBlock component={AnimatedHistogram} extraPropData={{ data: chuckotkaData, corr: corr }} maxHeight={300} mini={false}/>

@@ -45,3 +45,15 @@
 .open {
     transform: rotate(180deg);
 }
+
+@media screen and (max-width: 800px) {
+    .howto {
+        padding: 20px;
+    }
+    .howto__title {
+        font-size: 28px;
+    }
+    .howto__text {
+        font-size: 20px;
+    }
+}

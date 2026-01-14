@@ -21,3 +21,11 @@
 .form__button:hover {
     background-color: #FFD9B7;
 }
+
+@media screen and (max-width: 800px) {
+    .form__button {
+        margin: 20px 0;
+        font-size: 20px;
+        padding: 13px;
+    }
+}

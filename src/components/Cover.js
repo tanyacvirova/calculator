@@ -10,9 +10,8 @@ const Cover = () => {
 
   const circleCount = (() => {
     const w = chartSize.width || 0;
-    if (w < 400) return 11;
-    if (w < 600) return 15;
-    if (w < 800) return 17;
+    if (w < 450) return 10;
+    if (w < 800) return 15;
     return 19;
   })();
 
@@ -31,7 +30,7 @@ const Cover = () => {
     const angleEnd = 320;
     const radius = Math.min(chartSize.width || 0, 1200) * 0.6;
     const centerX = (chartSize.width || 0) * 0.5;
-    const centerY = (chartSize.width || 0) * 0.65;
+    const centerY = chartSize.width < 600 ? (chartSize.width || 0) * 0.7 : (chartSize.width || 0) * 0.65;
 
     const angle = angleStart + (index / circleCount) * (angleEnd - angleStart);
     const angleInRadians = angle * (Math.PI / 180); 

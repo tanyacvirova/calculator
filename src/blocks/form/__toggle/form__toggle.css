@@ -1,4 +1,15 @@
 .form__toggle {
     display: flex;
     width: 60%;
+    box-sizing: border-box;
+    align-items: stretch;
+    gap: 0;
+}
+
+@media screen and (max-width: 800px) {
+    .form__toggle {
+        width: 100%;
+        min-width: 0;
+        flex-direction: row;
+    }
 }

@@ -1,28 +1,28 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState, useCallback } from "react";
 
 export const useDimensions = (targetRef) => {
 
-  const getDimensions = () => {
+  const getDimensions = useCallback(() => {
     return {
       width: targetRef.current ? targetRef.current.offsetWidth : 0,
       height: targetRef.current ? targetRef.current.offsetHeight : 0
     };
-  };
+  }, [targetRef]);
 
-  const [dimensions, setDimensions] = useState(getDimensions);
+  const [dimensions, setDimensions] = useState(() => getDimensions());
 
-  const handleResize = () => {
+  const handleResize = useCallback(() => {
     setDimensions(getDimensions());
-  };
+  }, [getDimensions]);
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [handleResize]);
 
   useLayoutEffect(() => {
     handleResize();
-  }, []);
+  }, [handleResize]);
 
   return dimensions;
 }

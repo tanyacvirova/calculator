@@ -2,6 +2,13 @@
     display: flex;
     margin: 0;
     flex-direction: row;
-    justify-content: baseline;
+    justify-content: center;
+    align-items: center;
     gap: 10px;
+}
+
+@media screen and (max-width: 800px) {
+    .header__container {
+        gap: 5px;
+    }
 }

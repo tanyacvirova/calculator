@@ -41,7 +41,7 @@ function Bar({ width, height, mini }) {
                     y={yScale(d.title)}
                     width={xScale(d.value)}
                     height={yScale.bandwidth()}
-                    fill={userData.status === d.key ? "#FF6A3D" : "#D9D9D9"}
+                    fill={+userData.status === d.key ? "#FF6A3D" : "#D9D9D9"}
                 />
                 <text
                     x={10}

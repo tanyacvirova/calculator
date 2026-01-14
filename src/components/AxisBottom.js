@@ -2,14 +2,14 @@ import { useMemo } from 'react';
 import { margin } from '../constants/constants';
 //y1={mini ? -height : -height + margins.top + margins.bottom}
 
-function AxisBottom({ xScale, height, mini, side }) {
+function AxisBottom({ xScale, height, width, mini, side }) {
 
     const ticks = useMemo(() => {
-        return xScale.ticks(mini ? 3 : 5).map((value) => ({
+        return xScale.ticks(width < 700 ? 3 : mini ? 3 : 5).map((value) => ({
             value,
             xOffset: xScale(value),
         }));
-    }, [xScale, mini]);
+    }, [xScale, mini, width]);
 
     return (
         <>

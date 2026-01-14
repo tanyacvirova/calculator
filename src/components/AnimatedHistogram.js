@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { margin, chartParams } from '../constants/constants';
 import AxisBottom from './AxisBottom';
 import AxisLeft from './AxisLeft';
@@ -17,54 +17,61 @@ function AnimatedHistogram({ width, height, mini, content }) {
         return corr ? data.binsScaled : data.binsBase;
     }, [corr, data]);
 
-    const xScale = d3.scaleLinear()
-        .domain([binValues[0].x0, binValues[binValues.length - 1].x1])
-        .range([margin(mini, side).left, width - margin(mini, side).right]);
+    const xScale = useMemo(() => {
+        return d3.scaleLinear()
+            .domain([binValues[0].x0, binValues[binValues.length - 1].x1])
+            .range([margin(mini, side).left, width - margin(mini, side).right]);
+    }, [binValues, width, mini, side]);
 
-    const yScale = d3.scaleLinear()
-        .domain([0, max]).nice()
-        .range([height - margin(mini, side).bottom, margin(mini, side).top]);
+    const yScale = useMemo(() => {
+        return d3.scaleLinear()
+            .domain([0, max]).nice()
+            .range([height - margin(mini, side).bottom, margin(mini, side).top]);
+    }, [height, max, mini, side]);
 
-    function handleHover(rectData) {
+    const handleHover = useCallback((rectData) => {
         setTooltipData(rectData);
-    }
+    }, []);
 
-    const allRects = binValues.map((bin, i) => {
-        if (xScale.range()[-1] < 0 && yScale.range()[-1] < 0) {
-            return null;
-        }
-        
-        if (height <= 0) {
-            return null;
-        }
+    const allRects = useMemo(() => {
+        return binValues.map((bin, i) => {
+            if (xScale.range()[-1] < 0 && yScale.range()[-1] < 0) {
+                return null;
+            }
+            
+            if (height <= 0) {
+                return null;
+            }
 
-        const x = xScale(bin.x0) + (mini ? 0 : 1);
-        const y = yScale(bin.sum);
-        const rectWidth = xScale(bin.x1) - xScale(bin.x0) - (mini ? 0 : 1);
-        const rectHeight = height - (margin(mini, side).bottom) - yScale(bin.sum);
-        const value = bin.x1;
-        const cum = bin.cumSum;
+            const x = xScale(bin.x0) + (mini ? 0 : 1);
+            const y = yScale(bin.sum);
+            const rectWidth = xScale(bin.x1) - xScale(bin.x0) - (mini ? 0 : 1);
+            const rectHeight = height - (margin(mini, side).bottom) - yScale(bin.sum);
+            const value = bin.x1;
+            const cum = bin.cumSum;
 
-        return (
-            <AnimatedRect
-                key={i}    
-                x={x}
-                y={y}
-                rectWidth={rectWidth}
-                rectHeight={rectHeight}
-                value={value}
-                cum={cum}
-                onHover={handleHover}
-            />
-        );
-    });
+            return (
+                <AnimatedRect
+                    key={i}    
+                    x={x}
+                    y={y}
+                    rectWidth={rectWidth}
+                    rectHeight={rectHeight}
+                    value={value}
+                    cum={cum}
+                    sum={bin.sum}
+                    onHover={handleHover}
+                />
+            );
+        });
+    }, [binValues, xScale, yScale, height, mini, side, handleHover]);
 
     return (
         <div style={{ position: "relative"}}>
             <svg width={width} height={height}>
                 <AxisLeft yScale={yScale} width={width} mini={mini} side={content.side}/>
                 <g transform={`translate(0, ${height - margin(mini, side).bottom})`}>
-                    <AxisBottom xScale={xScale} height={height} mini={mini} side={content.side}/>
+                    <AxisBottom xScale={xScale} height={height} width={width} mini={mini} side={content.side}/>
                 </g>
                 {allRects}
             </svg>
@@ -76,7 +83,7 @@ function AnimatedHistogram({ width, height, mini, content }) {
                 left: 0,
                 pointerEvents: "none"
             }}>
-                <Tooltip interactionData={tooltipData} />
+                <Tooltip interactionData={tooltipData} chartWidth={width}/>
                 {(tooltipData && tooltipData.value <= chartParams.threshold) && <div style={{ 
                     position: "absolute",
                     top: tooltipData.y,

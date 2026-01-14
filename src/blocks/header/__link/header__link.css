@@ -19,3 +19,9 @@
 .header__link:visited {
     color: #FF6A3D;
 }
+
+@media screen and (max-width: 800px) {
+    .header__link {
+        font-size: 20px;
+    }
+}

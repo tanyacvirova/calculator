@@ -23,6 +23,7 @@ function Rect({ bins, xScale, yScale, height, mini, onHover }) {
                     onHover({
                         x: xScale(bin.x0) + (mini ? 0 : 1),
                         y: yScale(bin.sum),
+                        sum: bin.sum,
                         value: bin.x1,
                         cum: bin.cumSum,
                         width: xScale(bin.x1) - xScale(bin.x0) - (mini ? 0 : 1),
