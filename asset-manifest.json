@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/calculator/static/css/main.9c4baf4a.css",
-    "main.js": "/calculator/static/js/main.934adb28.js",
+    "main.css": "/calculator/static/css/main.d03097ee.css",
+    "main.js": "/calculator/static/js/main.685055f4.js",
     "static/js/453.ca07578d.chunk.js": "/calculator/static/js/453.ca07578d.chunk.js",
     "static/media/aeonikpro-regular.woff": "/calculator/static/media/aeonikpro-regular.c0a0f8329448b2004805.woff",
     "static/media/aeonikpro-regular.woff2": "/calculator/static/media/aeonikpro-regular.809a849cd3a61dc2bf10.woff2",
@@ -16,12 +16,12 @@
     "static/media/clothes.svg": "/calculator/static/media/clothes.13855a1cfab1c865a0c0.svg",
     "index.html": "/calculator/index.html",
     "static/media/arrow.svg": "/calculator/static/media/arrow.761a904048b2b46e3752bc7041841639.svg",
-    "main.9c4baf4a.css.map": "/calculator/static/css/main.9c4baf4a.css.map",
-    "main.934adb28.js.map": "/calculator/static/js/main.934adb28.js.map",
+    "main.d03097ee.css.map": "/calculator/static/css/main.d03097ee.css.map",
+    "main.685055f4.js.map": "/calculator/static/js/main.685055f4.js.map",
     "453.ca07578d.chunk.js.map": "/calculator/static/js/453.ca07578d.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.9c4baf4a.css",
-    "static/js/main.934adb28.js"
+    "static/css/main.d03097ee.css",
+    "static/js/main.685055f4.js"
   ]
 }
