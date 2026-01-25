@@ -12,20 +12,23 @@ function Main() {
     const [regionsData, setRegionsData] = useState([]);
 
     useEffect(() => {
-        const dataFetch = async() => {
-            const data = await d3.csv(process.env.PUBLIC_URL + '/data_v20251216.csv', (d) => {
-                return {
-                    sum: +d.sum,
-                    sum_corr: +d.sum_corr,
-                    share: +d.share,
-                    step: +d.step_share,
-                    code: +d.region_code,
-                    region: d.region_short_name
-                    }
-            });
-            setRegionsData(d3.sort(data, (d) => d.code));
-        };
-        dataFetch();
+    const dataFetch = async () => {
+      const data = (
+        await d3.csv(process.env.PUBLIC_URL + "/data_v20251216.csv", (d) => {
+          return {
+            sum: +d.sum,
+            sum_corr: +d.sum_corr,
+            share: +d.share,
+            step: +d.step_share,
+            code: +d.region_code,
+            region: d.region_short_name,
+          };
+        })
+      ).sort((a, b) => a.code - b.code); // Можно отсортировать по цепочке методов, если дождаться await в скобках
+      
+      setRegionsData(data);
+    };
+    dataFetch();
     }, []);
 
     
