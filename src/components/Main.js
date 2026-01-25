@@ -10,7 +10,6 @@ function Main() {
     const [currentUserData, setCurrentUserData] = useState({});
     const [isFormFilled, setIsFormFilled] = useState(false);
     const [regionsData, setRegionsData] = useState([]);
-    const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
         const dataFetch = async() => {
@@ -29,11 +28,6 @@ function Main() {
         dataFetch();
     }, []);
 
-    useEffect(() => {
-        if (regionsData.length > 0) {
-            setIsLoaded(true);
-        }
-    }, [regionsData]);
     
     function calculate(formData) {
         formData.perCapitaIncome = +formData.income / +formData.period / +formData.members
@@ -46,7 +40,7 @@ function Main() {
             <main className='content'>
                 <Cover />
                 <Form onSubmit={(data) => calculate(data)} />
-                {(isFormFilled && isLoaded) && <Content userData={currentUserData} data={regionsData}/>}
+                {(isFormFilled && (Boolean(regionsData.length))) && <Content userData={currentUserData} data={regionsData}/>}
                 <Footer />
             </main>
         </CurrentUserContext.Provider>
