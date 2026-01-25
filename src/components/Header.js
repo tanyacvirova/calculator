@@ -11,9 +11,35 @@ function Header() {
                 <a className='header__link' href="https://tochno.st/" target="_blank" rel="noreferrer">Если быть точным</a>
             </div>
             <div className='header__container'>
-                <a href="https://t.me/tochno_st" target="_blank" rel="noreferrer"><img className="header__logo" alt="Ссылка на телеграм-канал Если быть точным" src={telegram} /></a>
-                <a href="https://vk.com/tochno_st" target="_blank" rel="noreferrer"><img className="header__logo" alt="Ссылка на сообщество Если быть точным Вконтакте" src={vkontakte} /></a>
-                <a href="https://dzen.ru/tochnost" target="_blank" rel="noreferrer"><img className="header__logo" alt="Ссылка на Дзен-канал Если быть точным" src={dzen} /></a>
+        <div className="social-list">
+          {[
+            {
+              href: "https://t.me/tochno_st",
+              src: telegram,
+              alt: "Ссылка на телеграм-канал Если быть точным",
+            },
+            {
+              href: "https://vk.com/tochno_st",
+              src: vkontakte,
+              alt: "Ссылка на сообщество Если быть точным Вконтакте",
+            },
+            {
+              href: "https://dzen.ru/tochnost",
+              src: dzen,
+              alt: "Ссылка на Дзен-канал Если быть точным",
+            },
+          ].map(({ href, src, alt }) => (
+            <a
+              className="social-list__item"
+              key={href}
+              href={href}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <img className="social-list__logo" alt={alt} src={src} />
+            </a>
+          ))}
+        </div>
             </div>
         </header>
     );
