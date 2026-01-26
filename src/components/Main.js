@@ -7,8 +7,7 @@ import Footer from './Footer.js';
 import * as d3 from "d3";
 
 function Main() {
-    const [currentUserData, setCurrentUserData] = useState({});
-    const [isFormFilled, setIsFormFilled] = useState(false);
+    const [currentUserData, setCurrentUserData] = useState(null); // Лучше хранить null, чтобы явно понимать что данных нет, {} по Boolean даст true хотя для нас данных нет
     const [regionsData, setRegionsData] = useState([]);
 
     useEffect(() => {
@@ -32,18 +31,16 @@ function Main() {
     }, []);
 
     
-    function calculate(formData) {
-        formData.perCapitaIncome = +formData.income / +formData.period / +formData.members
+    function onSubmit(formData) {
         setCurrentUserData(formData);
-        setIsFormFilled(true);
     }
 
     return (
         <CurrentUserContext.Provider value={currentUserData}>
             <main className='content'>
                 <Cover />
-                <Form onSubmit={(data) => calculate(data)} />
-                {(isFormFilled && (Boolean(regionsData.length))) && <Content userData={currentUserData} data={regionsData}/>}
+                <Form onSubmit={onSubmit} /> {/* Можно передать сразу ссылку на функцию, тк у них подходящее кол-во параметров*/}
+                {(currentUserData && (Boolean(regionsData.length))) && <Content userData={currentUserData} data={regionsData}/>}
                 <Footer />
             </main>
         </CurrentUserContext.Provider>

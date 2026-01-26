@@ -85,9 +85,10 @@ function Form(props) {
             income: Number(formData.income),
             period: Number(formData.period),
             members: Number(formData.members),
-            status: Number(formData.status)
+            status: Number(formData.status),
+            perCapitaIncome: +formData.income / +formData.period / +formData.members // Лучше посчитать здесь, и "наружу" передавать уже готовое значение
         };
-
+        
         props.onSubmit(payload);
         setIsSubmitting(true);
     }, [formData, props]);
