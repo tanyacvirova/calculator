@@ -40,7 +40,7 @@ function Main() {
             <main className='content'>
                 <Cover />
                 <Form onSubmit={onSubmit} /> {/* Можно передать сразу ссылку на функцию, тк у них подходящее кол-во параметров*/}
-                {(currentUserData && (Boolean(regionsData.length))) && <Content userData={currentUserData} data={regionsData}/>}
+                {(currentUserData && (Boolean(regionsData.length))) && <Content data={regionsData}/>}
                 <Footer />
             </main>
         </CurrentUserContext.Provider>

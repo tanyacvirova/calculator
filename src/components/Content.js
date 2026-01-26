@@ -3,6 +3,8 @@ import { chartParams, rosstatData } from "../constants/constants";
 import { useDimensions } from '../hooks/useDimensions';
 import { calculating } from '../utils/calculations';
 import * as d3 from "d3";
+import { CurrentUserContext } from "../context/Context";
+import { useContext } from "react";
 
 import Buttons from "./Buttons";
 import ResponsiveBlock from './ResponsiveBlock';
@@ -14,7 +16,8 @@ import PromoBlock from './PromoBlock';
 import arrowSvg from '../images/arrow.svg';
 
 
-function Content({ userData, data }) {
+function Content({ data }) {
+    const userData = useContext(CurrentUserContext);
     const [corr, setCorr] = useState(false);
     const [showAll, setShowAll] = useState(false);
     const regionsContainerRef = useRef(null);
