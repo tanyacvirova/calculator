@@ -72,13 +72,13 @@ function Form(props) {
 
     const handleSubmit = ((evt) => {
         evt.preventDefault();
-        const incomeError = validateNumeric("income", formData.income);
-        const membersError = validateNumeric("members", formData.members);
+        // const incomeError = validateNumeric("income", formData.income);
+        // const membersError = validateNumeric("members", formData.members);
 
-        if (incomeError || membersError) {
-            setErrors({ income: incomeError, members: membersError });
-            return;
-        }
+        // if (incomeError || membersError) {
+        //     setErrors({ income: incomeError, members: membersError });
+        //     return;
+        // }
 
         const payload = {
             ...formData,
@@ -93,7 +93,7 @@ function Form(props) {
         setIsSubmitting(true);
     });
 
-    const hasErrors = !!errors.income || !!errors.members || formData.income === "" || formData.members === "";
+    const hasErrors = !!errors.income || !!errors.members
 
     return (
         <div className="form">
