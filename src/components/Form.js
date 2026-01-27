@@ -15,7 +15,7 @@ const validateNumeric = (name, value) => {
 function Form(props) {
     const [formData, setFormData] = useState({
         region: { code: "37", name: "Курганская обл."},
-        income: "50000",
+        income: 50_000,
         period: "1",
         members: "1",
         status: "3"
@@ -122,8 +122,8 @@ function Form(props) {
                             value={formData.income}
                             onChange={handleChange}
                             min="0"
-                            max="10000000000"
-                            step="50000"
+                            max={10_000_000_000}
+                            step={50_000}
                         />
                     {/*{errors.income && <p className="form__caption form__caption-warning">{errors.income}</p>}*/}
                         <div className="form__toggle">
