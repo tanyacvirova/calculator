@@ -183,7 +183,7 @@ function Form(props) {
                     <option value="5">Можете позволить себе все, даже квартиру</option>
                 </select>
                 <span className="form__label"></span>
-                <button className="form__button" type="submit" onSubmit={handleSubmit} disabled={isSubmitting || hasErrors}>Посчитать</button>
+                <button className="form__button" type="submit" disabled={isSubmitting || hasErrors}>Посчитать</button>
             </form>
         </div>
     )
