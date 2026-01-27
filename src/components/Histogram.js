@@ -9,7 +9,7 @@ import Rect from './Rect.js';
 function Histogram({ width, height, mini, content }) {
     const data = content.data;
     const max = content.max;
-    const [tooltipData, settooltipData] = useState(null);
+    const [tooltipData, setTooltipData] = useState(null);
 
     const xScale = useMemo(() => {
         return d3.scaleLinear()
@@ -24,7 +24,7 @@ function Histogram({ width, height, mini, content }) {
     }, [height, max, mini]);
 
     const handleHover = useCallback((rectData) => {
-        settooltipData(rectData);
+        setTooltipData(rectData);
     }, []);
 
     return (
