@@ -15,7 +15,7 @@ const validateNumeric = (name, value) => {
 function Form(props) {
     const [formData, setFormData] = useState({
         region: { code: "37", name: "Курганская обл."},
-        income: "50000",
+        income: 50_000,
         period: "1",
         members: "1",
         status: "3"
@@ -42,7 +42,7 @@ function Form(props) {
         fetchCsv();
     }, []);
 
-    const handleChange = useCallback((evt) => {
+    const handleChange = (evt) => {
         const { name, value, type } = evt.target;
         
         if (isSubmitting) {
@@ -68,31 +68,32 @@ function Form(props) {
         }
 
         setFormData(prevFormData => ({ ...prevFormData, [name]: value }));
-    }, [isSubmitting]);
+    };
 
-    const handleSubmit = useCallback((evt) => {
+    const handleSubmit = ((evt) => {
         evt.preventDefault();
-        const incomeError = validateNumeric("income", formData.income);
-        const membersError = validateNumeric("members", formData.members);
+        // const incomeError = validateNumeric("income", formData.income);
+        // const membersError = validateNumeric("members", formData.members);
 
-        if (incomeError || membersError) {
-            setErrors({ income: incomeError, members: membersError });
-            return;
-        }
+        // if (incomeError || membersError) {
+        //     setErrors({ income: incomeError, members: membersError });
+        //     return;
+        // }
 
         const payload = {
             ...formData,
             income: Number(formData.income),
             period: Number(formData.period),
             members: Number(formData.members),
-            status: Number(formData.status)
+            status: Number(formData.status),
+            perCapitaIncome: +formData.income / +formData.period / +formData.members // Лучше посчитать здесь, и "наружу" передавать уже готовое значение
         };
-
+        
         props.onSubmit(payload);
         setIsSubmitting(true);
-    }, [formData, props]);
+    });
 
-    const hasErrors = !!errors.income || !!errors.members || formData.income === "" || formData.members === "";
+    const hasErrors = !!errors.income || !!errors.members
 
     return (
         <div className="form">
@@ -121,8 +122,8 @@ function Form(props) {
                             value={formData.income}
                             onChange={handleChange}
                             min="0"
-                            max="10000000000"
-                            step="50000"
+                            max={10_000_000_000}
+                            step={50_000}
                         />
                     {/*{errors.income && <p className="form__caption form__caption-warning">{errors.income}</p>}*/}
                         <div className="form__toggle">
@@ -182,7 +183,7 @@ function Form(props) {
                     <option value="5">Можете позволить себе все, даже квартиру</option>
                 </select>
                 <span className="form__label"></span>
-                <button className="form__button" type="submit" onSubmit={handleSubmit} disabled={isSubmitting || hasErrors}>Посчитать</button>
+                <button className="form__button" type="submit" disabled={isSubmitting || hasErrors}>Посчитать</button>
             </form>
         </div>
     )

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDimensions } from '../hooks/useDimensions.js';
+import classNames from 'classnames';
 
 const HIGHLIGHT_DURATION = 400;
 
@@ -35,8 +36,8 @@ const Cover = () => {
     const angle = angleStart + (index / circleCount) * (angleEnd - angleStart);
     const angleInRadians = angle * (Math.PI / 180); 
 
-    const x = centerX + radius * Math.cos(angleInRadians);
-    const y = centerY + radius * Math.sin(angleInRadians);
+    const left = centerX + radius * Math.cos(angleInRadians);
+    const top = centerY + radius * Math.sin(angleInRadians);
 
     // Dynamic size capped to avoid overlaps based on arc spacing
     const angleSpanRad = (angleEnd - angleStart) * (Math.PI / 180);
@@ -46,27 +47,18 @@ const Cover = () => {
     const size = Math.min(baseSize, spacing * 0.7);
 
     return { 
-      top: `${y}px`,
-      left: `${x}px`,
-      width: `${size}px`, 
-      height: `${size}px` };
-  };
-
-  const getCircleClass = (index) => {
-    let className = 'circle';
-    if (activeIndex === index) {
-      className += ' highlighted';
-    } else if (index <= activeIndex) {
-      className += ' passed';
-    }
-    return className;
+      top,
+      left,
+      width: size, 
+      height: size 
+    };
   };
 
   return (
     <div 
       ref={chartRef}
       className="circle-container" 
-      style={{ width: "100%", height: `${chartSize.width < 700 ? 300 : 500}px` }}
+      style={{ width: "100%", height: chartSize.width < 700 ? 300 : 500 }}
     >
       <div className='cover-headline'>
         <h1 className='cover-title'>Сколько вы зарабатываете</h1>
@@ -75,7 +67,10 @@ const Cover = () => {
       {[...Array(circleCount + 1)].map((_, index) => (
         <div
           key={index}
-          className={getCircleClass(index)}
+          className={classNames('circle', {
+            'highlighted': activeIndex === index,
+            'passed': index <= activeIndex
+          })}
           style={getCirclePosition(index)}
         />
       ))}
