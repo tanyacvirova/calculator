@@ -63,7 +63,7 @@ function Content({ data }) {
         return columnsPerRow * 4;
     }, [columnsPerRow]);
 
-    const totalRegions = 85;
+    const totalRegions = allRegionsData.length;
     
     const remainingCount = useMemo(() => {
         return totalRegions - initialVisibleCount;
