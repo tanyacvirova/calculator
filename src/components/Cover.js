@@ -35,8 +35,8 @@ const Cover = () => {
     const angle = angleStart + (index / circleCount) * (angleEnd - angleStart);
     const angleInRadians = angle * (Math.PI / 180); 
 
-    const x = centerX + radius * Math.cos(angleInRadians);
-    const y = centerY + radius * Math.sin(angleInRadians);
+    const left = centerX + radius * Math.cos(angleInRadians);
+    const top = centerY + radius * Math.sin(angleInRadians);
 
     // Dynamic size capped to avoid overlaps based on arc spacing
     const angleSpanRad = (angleEnd - angleStart) * (Math.PI / 180);
@@ -46,10 +46,11 @@ const Cover = () => {
     const size = Math.min(baseSize, spacing * 0.7);
 
     return { 
-      top: `${y}px`,
-      left: `${x}px`,
-      width: `${size}px`, 
-      height: `${size}px` };
+      top,
+      left,
+      width: size, 
+      height: size 
+    };
   };
 
   const getCircleClass = (index) => {
@@ -66,7 +67,7 @@ const Cover = () => {
     <div 
       ref={chartRef}
       className="circle-container" 
-      style={{ width: "100%", height: `${chartSize.width < 700 ? 300 : 500}px` }}
+      style={{ width: "100%", height: chartSize.width < 700 ? 300 : 500 }}
     >
       <div className='cover-headline'>
         <h1 className='cover-title'>Сколько вы зарабатываете</h1>
