@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDimensions } from '../hooks/useDimensions.js';
+import classNames from 'classnames';
 
 const HIGHLIGHT_DURATION = 400;
 
@@ -53,16 +54,6 @@ const Cover = () => {
     };
   };
 
-  const getCircleClass = (index) => {
-    let className = 'circle';
-    if (activeIndex === index) {
-      className += ' highlighted';
-    } else if (index <= activeIndex) {
-      className += ' passed';
-    }
-    return className;
-  };
-
   return (
     <div 
       ref={chartRef}
@@ -76,7 +67,10 @@ const Cover = () => {
       {[...Array(circleCount + 1)].map((_, index) => (
         <div
           key={index}
-          className={getCircleClass(index)}
+          className={classNames('circle', {
+            'highlighted': activeIndex === index,
+            'passed': index <= activeIndex
+          })}
           style={getCirclePosition(index)}
         />
       ))}
