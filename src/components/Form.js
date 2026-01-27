@@ -42,7 +42,7 @@ function Form(props) {
         fetchCsv();
     }, []);
 
-    const handleChange = useCallback((evt) => {
+    const handleChange = (evt) => {
         const { name, value, type } = evt.target;
         
         if (isSubmitting) {
@@ -68,9 +68,9 @@ function Form(props) {
         }
 
         setFormData(prevFormData => ({ ...prevFormData, [name]: value }));
-    }, [isSubmitting]);
+    };
 
-    const handleSubmit = useCallback((evt) => {
+    const handleSubmit = ((evt) => {
         evt.preventDefault();
         const incomeError = validateNumeric("income", formData.income);
         const membersError = validateNumeric("members", formData.members);
@@ -91,7 +91,7 @@ function Form(props) {
         
         props.onSubmit(payload);
         setIsSubmitting(true);
-    }, [formData, props]);
+    });
 
     const hasErrors = !!errors.income || !!errors.members || formData.income === "" || formData.members === "";
 
