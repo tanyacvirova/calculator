@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
+import classNames from 'classnames';
 import { chartParams, rosstatData } from "../constants/constants";
 import { useDimensions } from '../hooks/useDimensions';
 import { calculating } from '../utils/calculations';
@@ -125,19 +126,19 @@ function Content({ data }) {
                 <ResponsiveBlock component={AnimatedHistogram} extraPropData={{ data: chuckotkaData, corr: corr }} maxHeight={300} mini={false}/>
                 <p className='user__caption' style={{ textAlign: 'right' }}>&rarr; Среднедушевой доход семей</p>
                 <p className='user__text'>Ниже&nbsp;&mdash; распределение доходов для всех регионов России. Яркая цифра под названием каждого региона&nbsp;&mdash; это доля семей, чей среднедушевой доход в&nbsp;месяц меньше вашего.</p>
-                <div className={`regions__wrapper ${showAll ? 'expanded' : ''}`}>
+                <div className={classNames('regions__wrapper', { expanded: showAll })}>
                     <div className='regions' ref={regionsContainerRef}>
                         {sortedRegions.slice(0, showAll ? totalRegions : initialVisibleCount).map((region, i) => {
                             const side = i % columnsPerRow === 0;
-                            return (<div key={region.code} className={side ? "regions__region-side" : "regions__region"}>
-                                <h3 className={side ? "regions__title shift" : "regions__title"}>{region.region}</h3>
-                                <span className={side ? "regions__accent shift" : "regions__accent"}>{corr ? d3.format(".0f")(region.belowScaled) : d3.format(".0f")(region.belowBase)}%</span>
+                            return (<div key={region.code} className={classNames('regions__region', { 'regions__region-side': side })}>
+                                <h3 className={classNames('regions__title', { shift: side })}>{region.region}</h3>
+                                <span className={classNames('regions__accent', { shift: side })}>{corr ? d3.format(".0f")(region.belowScaled) : d3.format(".0f")(region.belowBase)}%</span>
                                 <ResponsiveBlock key={region.code} component={AnimatedHistogram} extraPropData={{ data: region, max: limits, side: side, corr: corr}} maxHeight={100} mini={true} />
                             </div>)
                         })}
                     </div>
                 </div>
-                <button className={`regions__button ${showAll ? 'expanded' : ''}`} onClick={handleShowAllClick}>
+                <button className={classNames('regions__button', { expanded: showAll })} onClick={handleShowAllClick}>
                     {showAll ? `Только ${initialVisibleCount} регионов` : `Остальные ${remainingCount} регионов России`}
                     <img src={arrowSvg} alt="" className="regions__button-arrow" />
                 </button>
